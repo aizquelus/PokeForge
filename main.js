@@ -1,78 +1,130 @@
-let user = prompt("Bienvenido/a al autogestor de reuniones de la Agencia de Marketing Digital White Mirror Agency, encantados de poder atenderte. \n¡Estás a solo un paso de poder agendar un espacio con uno de nuestros asesores para impulsar tu negocio! \n¿Cuál es tu nombre?");
+document.addEventListener("DOMContentLoaded", () => {
+    let trainerName;
+    let choice;
+    let chosenPokemon;
+    let randomPokemon;
+    let pokeNames;
+    let pokemonTeam = [];
+    const availablePokemon = [];
 
-let isUser = (user != "" && user != null);
-let isValidDay;
-let day;
-let mensaje;
-let userChoice;
-
-let choice = function() {
-    let choiceResult = parseInt(prompt(`¡Hola, ${user}! \n¿Deseas coordinar una llamada con uno de nuestros asesores el día de hoy? \nIngresa el número que corresponda: \n1. Si \n2. No`));
-
-    return choiceResult;
-};
-
-function selectDay(){
-    day = parseInt(prompt("¡Estupendo! \nPor favor, selecciona el día de la semana en curso en el que deseas tener la llamada: \n1. Lunes \n2. Martes \n3. Miércoles \n4. Jueves \n5. Viernes \n6. Sábado \n7. Domingo"));
-
-    isValidDay = (day >= 1 && day <= 7);
-};
-
-if (isUser) {
-    userChoice = choice();
-} else {
-    while(!user) {
-        user = prompt("Oops! Por favor, ingresa tu nombre.")
+    class Pokemon {
+        constructor(pID, pName, pType) {
+            this.id = pID;
+            this.name = pName;
+            this.type = pType;
+        };
     };
-    userChoice = choice();
-};
 
-while(isNaN(userChoice) || userChoice < 1 || userChoice > 2) {
-    alert("Por favor, ingresa 1 o 2");
-    userChoice = choice();
-};
+    availablePokemon.push(new Pokemon(0001, "Bulbasaur", "Planta/Veneno"));
+    availablePokemon.push(new Pokemon(0004, "Charmander", "Fuego"));
+    availablePokemon.push(new Pokemon(0005, "Charmeleon", "Fuego"));
+    availablePokemon.push(new Pokemon(0006, "Charizard", "Fuego/Volador"));
+    availablePokemon.push(new Pokemon(0007, "Squirtle", "Agua"));
+    availablePokemon.push(new Pokemon(0008, "Wartortle", "Agua"));
+    availablePokemon.push(new Pokemon(0009, "Blastoise", "Agua"));
+    availablePokemon.push(new Pokemon(0010, "Caterpie", "Bicho"));
 
-if(userChoice == 1) {
-    selectDay();
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
 
-    while(!isValidDay){
-        alert("El día seleccionado no es válido.");
-        selectDay();
+    function getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
+
+    function getRandomPokemon(mainArr, amount) {
+        const randomizedArray = [];
+        const usedIndexes = [];
+
+        while (randomizedArray.length < amount) {
+            const randomIndex = getRandomNumber(0, mainArr.length);
+
+            if (!usedIndexes.includes(randomIndex)) {
+                randomizedArray.push(mainArr[randomIndex]);
+                usedIndexes.push(randomIndex);
+            }
+        }
+
+        return randomizedArray;
+    };
+
+    function getPokemonName(arr) {
+        return arr.map((el, i) => `${i + 1}. ${el.name}`);
+    }
+
+    function findPokemonByName(arr, chosenPokemon) {
+        return arr.find(el => {
+            return el.name.includes(chosenPokemon);
+        });
+    };
+
+    function addPokemon(pokemon) {
+        pokemonTeam.push(pokemon);
+    };
+
+    alert("¡Hola entrenador/a! ¡Estás a punto de crear el equipo Pokemon que te llevará a la victoria!");
+
+    function getTrainerName(){
+        trainerName = prompt("Primero, ¿cuál es tu nombre?");
+    }
+
+    getTrainerName();
+
+    while(trainerName == "" || trainerName == null || !isNaN(trainerName)) {
+        alert("Por favor, ingresa tu nombre de manera correcta para armar tu equipo Pokemon e iniciar tu aventura.")
+        
+        getTrainerName();
+    };
+
+    trainerName = capitalizeFirstLetter(trainerName);
+
+    function getTrainerChoice() {
+        choice = parseInt(prompt(`${trainerName}... ¡Vaya! Incluso tu nombre suena legendario. \n Y dime, ${trainerName} ¿Qué prefieres hacer? \n 1. ¡Crear mi propio equipo Pokémon! \n 2. ¡Atrápalos por mi!`));
+    }
+
+    getTrainerChoice();
+
+    while(isNaN(choice) || choice < 1 || choice > 2) {
+        alert("Por favor, ingresa 1 o 2");
+        getTrainerChoice();
+    };
+
+    if(choice === 1) {
+        pokeNames = getPokemonName(availablePokemon);
+        
+        let i = 5;
+        while(pokemonTeam.length < 6 && i >= 0) {
+            chosenPokemon = prompt(`¡Manos a la obra! Elige alguno de los siguientes Pokemon disponibles: \n${pokeNames.join("\n")}`);
+
+            while(chosenPokemon == "" || chosenPokemon == null || !isNaN(chosenPokemon)) {
+                alert("Por favor, ingresa un Pokemon válido. \nNo se permiten números ni espacios en blanco.")
+                
+                chosenPokemon = prompt(`¡Manos a la obra! Elige alguno de los siguientes Pokemon disponibles: \n${pokeNames.join("\n")}`);
+            };
+            
+            chosenPokemon = capitalizeFirstLetter(chosenPokemon);
+
+            let foundPokemon = findPokemonByName(availablePokemon, chosenPokemon);
+        
+            if(foundPokemon){
+                addPokemon(foundPokemon);
+        
+                alert(`¡Haz agregado a ${foundPokemon.name} a tu equipo! Te quedan ${i} Pokemon para agregar.`);
+        
+                i--;
+            } else {
+                alert("No se encontró el Pokémon deseado.");
+            };
+        };
+        pokeNames = getPokemonName(pokemonTeam);
+        
+    } else if(choice === 2) {
+        randomPokemon = getRandomPokemon(availablePokemon, 6);
+        
+        pokeNames = getPokemonName(randomPokemon);
     };
         
-    switch(day) {
-            
-        case 1:
-            mensaje = "LUNES";
-        break;
-            
-        case 2:
-            mensaje = "MARTES";
-        break;
-            
-        case 3:
-            mensaje = "MIÉRCOLES";
-        break;
-            
-        case 4:
-            mensaje = "JUEVES";
-        break;
-            
-        case 5:
-            mensaje = "VIERNES";
-        break;
-            
-        case 6:
-            mensaje = "SÁBADO";
-        break;
-            
-        case 7:
-            mensaje = "DOMINGO";
-        break;
-    };
-        
-    alert(`Tu llamada ha sido agendada con éxito para el próximo ${mensaje}, con el asesor Juan Hernández. \n¡Gracias por preferir a White Mirror!`);
+    alert(`¡Enhorabuena! Este es tu nuevo equipo Pokemon: \n${pokeNames.join("\n")}`);
+    alert("¡Vuelve pronto entrenador/a! Tus Pokemon te esperan. :)");
 
-} else {
-    alert("Gracias por visitar el sitio de White Mirror Agency, ¡vuelve pronto!");
-};
+});

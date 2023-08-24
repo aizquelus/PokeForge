@@ -1,0 +1,107 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Roboto", "sans-seriff";
+    text-align: center;
+    font-size: 16px;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    display: inline-block;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #f0f0f0;
+}
+
+.dark-background {
+    background-color: #0AA1DD;
+    color: #f0f0f0;
+}
+
+.light-background {
+    background-color: #fff;
+    color: #383838;
+}
+
+/*-------------------- NAVIGATION BAR --------------------*/
+.navbar {
+    background: linear-gradient(132deg, rgba(33,85,205,1) 0%, rgb(104, 186, 199) 100%);
+    min-height: 10vh;
+    padding: 2% 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar_logo {
+    font-size: 1.5rem;
+    max-width: 200px;
+}
+
+.navbar_logo img {
+    width: 100%;
+}
+
+.navlinks_item {
+    margin-left: 10px;
+    font-size: 2rem;
+    padding-bottom: 1%;
+}
+
+.navlinks_item a:hover {
+    color: #2155CD;
+    transition: .2s;
+}
+
+.navlinks_item a:visited {
+    color: inherit;
+}
+
+/*-------------------- END OF NAVIGATION BAR --------------------*/
+
+/*-------------------- MAIN SECTION --------------------*/
+
+main {
+    min-height: 90vh;;
+}
+
+/*-------------------- END OF MAIN SECTION --------------------*/
+
+/*-------------------- FOOTER --------------------*/
+.footer {
+    padding: 5% 15%;
+}
+
+.sns_item {
+    font-size: 1.3rem;
+
+}
+
+.sns_item a:visited {
+    color: inherit;
+}
+
+.sns_item a:hover {
+    color: #2155CD;
+    transition: .3s;
+}
+
+.footer-icon {
+    margin: 20px 10px;
+}
+
+/*-------------------- END OF FOOTER --------------------*/
