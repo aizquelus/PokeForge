@@ -7,9 +7,16 @@
 }
 
 body {
-    font-family: "Roboto", "sans-seriff";
+    font-family: 'Press Start 2P', cursive;
     text-align: center;
-    font-size: 16px;
+    font-size: 10px;
+}
+
+h1 {
+    font-size: 1.8rem;
+    color: #fff;
+    text-shadow: 5px 5px 8px #b2b1b1;
+    margin-bottom: 70px;
 }
 
 ul {
@@ -41,22 +48,82 @@ a {
 .navbar {
     background: linear-gradient(132deg, rgba(33,85,205,1) 0%, rgb(104, 186, 199) 100%);
     min-height: 10vh;
-    padding: 2% 7%;
+    padding: 2% 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.navbar-toggler {
+    color: white;
+    font-size: 2rem;
+    border: none;
+    box-shadow: none !important;
+}
+
+.navbar-toggler i:hover,
+.navbar-toggler i:active {
+    color:#2155CD;
+    transition: all .3s;
+}
+
+.offcanvas {
+    background: linear-gradient(145deg, rgba(33,85,205,1) 0%, rgb(104, 186, 199) 100%);
+}
+
+.offcanvas-header,
+.offcanvas-body .nav-link,
+.offcanvas-body .nav-link.show {
+    color: white;
+}
+
+.offcanvas-header .btn-close {
+    background-color: white;
+}
+
+.offcanvas-body .nav-link.active {
+    color: white;
+}
+
+.offcanvas-body .nav-link.active::after {
+    content: "";
+    display: block;
+    margin: 5px auto 0;
+    width: 80px;
+    height: 1px;
+    background-color: #E59400;
+}
+
+.navbar-nav {
+    font-size: 1rem;
+}
+
+.dropdown-toggle::after {
+    font-size: 1rem;
+}
+
+.dropdown-menu li {
+    width: 100%;
+}
+
+.dropdown-menu li:not(:last-child) {
+    border-bottom: 1px solid gray;
+}
+
+.dropdown-item {
+    white-space: wrap;
+}
+
 .navbar_logo {
     font-size: 1.5rem;
-    max-width: 200px;
+    max-width: 150px;
 }
 
 .navbar_logo img {
     width: 100%;
 }
 
-.navlinks_item {
+/* .navlinks_item {
     margin-left: 10px;
     font-size: 2rem;
     padding-bottom: 1%;
@@ -69,6 +136,14 @@ a {
 
 .navlinks_item a:visited {
     color: inherit;
+} */
+
+.offcanvas-title {
+    margin: 0 auto;
+}
+
+.btn-close {
+    font-size: 1rem;
 }
 
 /*-------------------- END OF NAVIGATION BAR --------------------*/
@@ -76,10 +151,208 @@ a {
 /*-------------------- MAIN SECTION --------------------*/
 
 main {
-    min-height: 90vh;;
+    background: url("../img/pokemon-background.png") no-repeat center center;
+    background-size: cover;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10vh 2px;
 }
 
+#main-starter {
+    background: url("../img/pokemon-background.png") no-repeat center center;
+}
+
+.dialog {
+    position: relative;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.dialog img {
+    width: 100%;
+    height: 80px;
+}
+
+.dialog p {
+    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-52%, -50%);
+    margin-bottom: 0;
+}
+
+.intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.intro-form {
+    width: 100%;
+}
+
+.intro-name {
+    width: 100%;
+    height: 60px;
+    padding-left: 10px;
+    font-size: 0.7rem;
+    outline: none;
+    opacity: 0.8;
+    border-radius: 5px;
+    border: 3px solid rgb(68, 68, 68);
+    margin-bottom: 1.2rem;
+}
+
+.intro-info-btns {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.intro-btn {
+    width: 40%;
+    margin-bottom: 2rem;
+
+
+
+    background: #92CD41;
+    display: inline-block;
+    position: relative;
+    text-align: center;
+    font-size: 1rem;
+    padding: 10px;
+    text-decoration: none; 
+    color: white;
+    box-shadow: inset -4px -4px 0px 0px #4AA52E;
+
+}
+
+.intro-btn:hover,
+.intro-btn:focus {
+    background: #76c442;
+    box-shadow: inset -6px -6px 0px 0px #4AA52E;
+}
+
+.intro-btn:active {
+    box-shadow: inset 4px 4px 0px 0px #4AA52E;
+}
+
+.intro-btn:before,
+.intro-btn:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: content-box;
+}
+
+.intro-btn:before {
+    top: -4px;
+    left: 0;
+    border-top: 4px #2c2c2c solid;
+    border-bottom: 4px #2c2c2c solid;
+}
+
+.intro-btn:after {
+    left: -4px;
+    top: 0;
+    border-left: 4px #2c2c2c solid;
+    border-right: 4px #2c2c2c solid;
+}
+
+.intro-btn--reset {
+    background: #E76E55;
+    box-shadow: inset -4px -4px 0px 0px #8C2022;
+
+}
+
+.intro-btn--reset:hover,
+.intro-btn--reset:focus {
+    background: #CE372B;
+    box-shadow: inset -6px -6px 0px 0px #8C2022;
+}
+
+.intro-btn--reset:active {
+    box-shadow: inset 4px 4px 0px 0px #8C2022;
+}
+
+.intro-btn--proceed {
+    background: #F7D51D;
+    box-shadow: inset -4px -4px 0px 0px #E59400;
+
+}
+
+.intro-btn--proceed:hover,
+.intro-btn--proceed:focus {
+    background: #F2C409;
+    box-shadow: inset -6px -6px 0px 0px #E59400;
+}
+
+.intro-btn--proceed:active {
+    box-shadow: inset 4px 4px 0px 0px #E59400;
+}
+
+
+
 /*-------------------- END OF MAIN SECTION --------------------*/
+
+/* Estilo para la caja de búsqueda */
+.search-box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+  /* Estilo para el contenedor de la lista desplegable */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+  /* Estilo para la lista desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 100%;
+    border: 1px solid #ccc;
+    max-height: 150px; /* Ajusta la altura máxima de la lista */
+    overflow-y: scroll; /* Agrega desplazamiento vertical si es necesario */
+    z-index: 1;
+}
+
+  /* Estilo para los elementos de la lista */
+.dropdown-content li {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: #333;
+}
+
+  /* Estilo para los elementos de la lista al pasar el mouse */
+.dropdown-content li:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+  /* Mostrar la lista desplegable cuando el input está enfocado */
+.dropdown input:focus + .dropdown-content {
+    display: block;
+}
+
+#accordionExample {
+    width: 80%;
+}
+
+.selectable {
+    cursor: pointer;
+    border-radius: 50%;
+}
 
 /*-------------------- FOOTER --------------------*/
 .footer {
