@@ -7,8 +7,15 @@ const modal = new bootstrap.Modal(document.getElementById("exampleModal"));
 const modalTitle = document.querySelector(".modal-title");
 const modalBodyText = document.querySelector(".modal-body-text");
 
-let pokeElement;
-let pokeList = [];
+window.onscroll = function() {
+    const scrollToTopButton = document.getElementById("scrollToTop");
+    scrollToTopButton.style.display = (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) ? "block" : "none";
+};
+
+document.getElementById("scrollToTop").addEventListener("click", function() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+});
 
 function getPokemonName(arr) {
     return arr.map((el, i) => `${i + 1}. ${el.name}`);
@@ -30,7 +37,7 @@ function generateAccordionItem(team, teamIndex) {
         </h2>
         <div id="collapsed${teamIndex}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
             <div class="accordion-body">
-                ${pokeNames.join(", ")}
+                <p>${pokeNames.join(", ")}</p>
             </div>
         </div>
     `;
@@ -45,7 +52,7 @@ function showModal(title, message) {
 };
 
 if(cachedTeams.length == 0 ) {
-    savedTitle.innerText = `Oops! Looks like you do not have any teams saved, trainer, ${cachedName}.`
+    savedTitle.innerText = `Oops! Looks like you do not have any teams saved, ${cachedName}.`
 } else {
     savedTitle.innerText = `Hello, ${cachedName}! Here are your saved Pokémon teams.`
 
@@ -58,20 +65,31 @@ if(cachedTeams.length == 0 ) {
         const deleteBtn = document.createElement("button");
         deleteBtn.classList.add("intro-btn", "intro-btn--reset", "delete");
         deleteBtn.setAttribute("type", "button");
-        deleteBtn.innerText = "Delete Teams";
+        deleteBtn.innerText = "Delete All Teams";
 
         accordion.append(deleteBtn);
 
         deleteBtn.addEventListener("click", () => {
-            const confirmed = window.confirm("¿Estás seguro de que deseas eliminar todos tus equipos Pokémon?");
-
-            if(confirmed){
-                localStorage.removeItem("savedTeams");
-                accordion.remove();
-                savedTitle.innerText = `Oops! Looks like you do not have any teams saved yet, ${cachedName}.`
-
-                showModal(`All Pokémon teams deleted!`, `${cachedName}, looks like all your Pokémon teams are gone! Feel free to come back and catch them all again. :)`);
-            };
+            Swal.fire({
+                title: 'Are you sure you want to delete all your Pokemon teams?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        `All Pokémon teams deleted!`,
+                        `${cachedName}, looks like all your Pokémon teams are gone! Feel free to come back and catch them all again. :)`,
+                        'success'
+                    )
+                    localStorage.removeItem("savedTeams");
+                    accordion.remove();
+                    savedTitle.innerText = `Oops! Looks like you do not have any teams saved yet, ${cachedName}.`
+                }
+            })
         });
     }
 };

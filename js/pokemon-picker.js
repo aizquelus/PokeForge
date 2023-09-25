@@ -11,59 +11,59 @@ const modal = new bootstrap.Modal(document.getElementById("exampleModal"));
 const modalTitle = document.querySelector(".modal-title");
 const modalBodyText = document.querySelector(".modal-body-text");
 
+const MAX_TEAM_SIZE = 6;
+const WAIT_TIME_MS = 2500;
+
+let pokemonTeam = JSON.parse(localStorage.getItem("pokemonTeam")) || [];
 let cachedName = localStorage.getItem("trainerName");
 let isFilled = false;
-let chosenPokemon;
-let pokeNames;
-let pokemonTeam = [];
-let teamInfoData = [];
-let foundPokemon = [];
-let pokeItems;
 let cardCount = 0;
 
+const typeColor = {
+    bug: "#26de81",
+    dragon: "#ffeaa7",
+    electric: "#fed330",
+    fairy: "#FF0069",
+    fighting: "#30336b",
+    fire: "#f0932b",
+    flying: "#81ecec",
+    grass: "#00b894",
+    ground: "#EFB549",
+    ghost: "#a55eea",
+    ice: "#74b9ff",
+    normal: "#95afc0",
+    poison: "#6c5ce7",
+    psychic: "#a29bfe",
+    rock: "#2d3436",
+    water: "#0190FF",
+};
+
 class Pokemon {
-    constructor(pID, pName, pType) {
+    constructor(pID, pName, pImage, pType) {
         this.id = pID;
         this.name = pName;
+        this.image = pImage,
         this.type = pType;
     };
 };
 
-const availablePokemon = [
-    new Pokemon(0001, "bulbasaur", "Planta/Veneno"),
-    new Pokemon(0004, "charmander", "Fuego"),
-    new Pokemon(0005, "charmeleon", "Fuego"),
-    new Pokemon(0006, "charizard", "Fuego/Volador"),
-    new Pokemon(0007, "squirtle", "Agua"),
-    new Pokemon(0008, "wartortle", "Agua"),
-    new Pokemon(0009, "blastoise", "Agua"),
-    new Pokemon(0010, "caterpie", "Bicho")
-];
+const availablePokemon = [];
 
-function resetVars() {
-    itemCount = 0;
-    cardCount = 0;
-    teamTitle.innerText = "";
-    nameFilter.value = "";
-    pokemonTeam = [];
-    availList
-    isFilled = false;
-}
+// Funciones de utilidad
 
-function addPokemonToTeam(pokemon) {
-    if (pokemonTeam.length < 6) {
-        pokemonTeam.push(pokemon);
-    } else {
-        modalTitle.innerText = `Your team is full already!`;
-        modalBodyText.innerText = `You already have 6 Pokémon in your team, ${cachedName}! No more Pokémon can be added.`;
-        modal.show();
-    }
-}
+window.onscroll = function() {
+    const scrollToTopButton = document.getElementById("scrollToTop");
+    scrollToTopButton.style.display = (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) ? "block" : "none";
+};
 
-function removePokemonFromTeam(pokemonName) {
-    const index = pokemonTeam.findIndex(pokemon => pokemon.name === pokemonName);
-    if (index !== -1) {
-        pokemonTeam.splice(index, 1);
+document.getElementById("scrollToTop").addEventListener("click", function() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+});
+
+function removeAllChildren(element) {
+    while(element.firstChild){
+        element.removeChild(element.firstChild);
     }
 }
 
@@ -73,98 +73,229 @@ function showModal(title, message) {
     modal.show();
 }
 
-function createPokemonCard(arr){
-    if(cardCount < 6){
-        let path = `"../img/pokemon-${arr.name}.png"`
-        const li = document.createElement("li");
-        li.innerHTML = 
+function resetVars() {
+    cardCount = 0;
+    teamTitle.innerText = "";
+    nameFilter.value = "";
+    pokemonTeam = [];
+    isFilled = false;
+    saveBtn.classList.add("hidden")
+}
+
+// Otras funciones
+
+function addPokemonToTeam(pokemon, arr) {
+    if (arr.length < MAX_TEAM_SIZE) {
+        arr.push(pokemon);
+        localStorage.setItem("pokemonTeam", JSON.stringify(pokemonTeam));
+        Toastify({
+            text: `${pokemon.name} has been added to your team!`,
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom",
+            position: "center",
+            stopOnFocus: true,
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+        }).showToast();
+    } else {
+        modalTitle.innerText = `Your team is full already!`;
+        modalBodyText.innerText = `You already have 6 Pokémon in your team, ${cachedName}! No more Pokémon can be added.`;
+        modal.show();
+    }
+}
+
+function removePokemonFromTeam(pokemonName, arr) {
+    const index = arr.findIndex(pokemon => pokemon.name === pokemonName);
+    if (index !== -1) {
+        arr.splice(index, 1);
+        localStorage.setItem("pokemonTeam", JSON.stringify(pokemonTeam));
+    }
+}
+
+function createPokemonCard(pokemon){
+    const {image, name, type} = pokemon;
+    const colorHex = typeColor[type];
+    if(cardCount < MAX_TEAM_SIZE){
+        const pokemonListItem = document.createElement("li");
+        pokemonListItem.innerHTML = 
         `
-        <div class="card" style="width: 18rem;">
-            <img src=${path} class="card-img-top" alt="${arr.name}">
+        <div class="card" style="width: 18rem; background: radial-gradient(circle at 50% 0%, ${colorHex} 36%, #ffffff 36%); background-color: ${colorHex};">
+            <img src=${image} class="card-img-top" alt="${name}">
             <div class="card-body">
-                <h5 class="card-title">${arr.name}</h5>
-                <p>${arr.type}</p>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <h5 class="card-title">${name}</h5>
+                <p><span class="type" style="background-color: ${colorHex}">${type}</span></p>
             </div>
-            <button>Delete</button>
+            <button id="clearBtn" class="delete-button intro-btn intro-btn--reset" type="button">Delete</button>
         </div>
         `;
-        pickedList.appendChild(li);
 
+        const deleteBtn = pokemonListItem.querySelector(".delete-button");
+        const pokemonName = pokemonListItem.querySelector(".card-title").innerText;
+        deleteBtn.addEventListener("click", ()=>{
+            pokemonListItem.remove();
+            removePokemonFromTeam(pokemonName, pokemonTeam);
+            cardCount--;
+            isFilled = false;
+            saveBtn.disabled = true;
+            saveBtn.classList.add("hidden");
+        })
+
+        pickedList.appendChild(pokemonListItem);
         cardCount++;
 
-        if(cardCount === 6) {
+        if(cardCount === MAX_TEAM_SIZE) {
             isFilled = true;
+            saveBtn.disabled = false;
+            saveBtn.classList.remove("hidden");
         }
     }
 }
 
 function filterPokemonByName(arr, chosenPokemon) {
-    return arr.filter((el) => {
-        return el.name.includes(chosenPokemon);
-    });
+    return arr.filter((el) => el.name.includes(chosenPokemon));
 };
 
-function renderPokemonList(pokemonList) {
+function renderPokemon(arr){
+    arr.forEach((pokemon)=>{
+        const {image, name, type} = pokemon;
+        const colorHex = typeColor[type] + "9c";
+        const selectablePokemon = document.createElement("li");
+        // selectablePokemon.classList.add("background-shape")
+        selectablePokemon.innerHTML = `
+            <img src=${image} class="selectable" alt="${name}" style="background-color: ${colorHex}">
+        `;
+        availList.appendChild(selectablePokemon);
+    })
+}
+
+function selectPokemon(arr){
+    pokeItems = document.querySelectorAll(".selectable");
+
+    for (const item of pokeItems) {
+        item.addEventListener("click", () => {
+            const selectedPokemon = arr.find(({name}) => name === item.alt);
+            if (selectedPokemon) {
+                addPokemonToTeam(selectedPokemon, pokemonTeam);
+                createPokemonCard(selectedPokemon);
+            }
+        });
+    }
+}
+
+function getPokemonList(arr){
+    return new Promise((resolve, reject)=>{
+        if(pokemonTeam.length !== 0) {
+            pickedList.innerHTML = "RECOVERING YOUR LIST...";
+        }
+        availList.innerHTML = "LOADING...";
+
+        setTimeout(()=>{
+            if(arr){
+                pickedList.innerHTML = "";
+                availList.innerHTML = "";
+                resolve(arr);
+            } else {
+                reject(("Error"));
+            }
+        },2500)
+    })
+}
+
+function initPokemonList() {
+    renderPokemon(availablePokemon);
+    selectPokemon(availablePokemon);
+}
+
+function getUnsavedPokemon(){
+    for (const pokemon of pokemonTeam) {
+        createPokemonCard(pokemon)
+    }
+}
+
+getPokemonList(availablePokemon)
+.then(()=>{
+    initPokemonList();
+    if(pokemonTeam.length !== 0){
+        getUnsavedPokemon();
+    }
+})
+.catch(err => {
+    availList.innerHTML = err;
+    pickedList.innerHTML = err;
+})
+
+function renderFilteredPokemon(arr) {
     availList.innerHTML = "";
 
-    if (pokemonList.length === 0) {
-        const li = document.createElement("li");
-        li.innerText = "No se encontraron coincidencias!";
-        availList.appendChild(li);
+    if (arr.length === 0) {
+        const notFoundElement = document.createElement("li");
+        notFoundElement.innerText = "No matches found!";
+        availList.appendChild(notFoundElement);
     } else {
-        pokemonList.forEach((pokemon) => {
-            let path = `"../img/pokemon-${pokemon.name}.png"`
-            const li = document.createElement("li");
-            li.innerHTML = `
-                <img src=${path} class="selectable" alt="${pokemon.name}">
-            `;
-            availList.appendChild(li);
-        });
-
-        pokeItems = document.querySelectorAll(".selectable");
-
-        for (const item of pokeItems) {
-            item.addEventListener("click", () => {
-                const selectedPokemon = pokemonList.find((pokemon) => pokemon.name === item.alt);
-                if (selectedPokemon) {
-                    addPokemonToTeam(selectedPokemon);
-                    createPokemonCard(selectedPokemon);
-                }
-            });
-        }
+        renderPokemon(arr);
+        selectPokemon(arr);
     }
 }
 
 function handleSearch() {
     const searchTerm = nameFilter.value;
-    itemCount = 0;
 
-    foundPokemon = filterPokemonByName(availablePokemon, searchTerm);
-    renderPokemonList(foundPokemon);
+    const foundPokemon = filterPokemonByName(availablePokemon, searchTerm);
+    renderFilteredPokemon(foundPokemon);
 }
 
-teamName.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        if (teamName.value !== "") {
-            teamTitle.innerText = teamName.value;
+function fetchPokemon(id) {
+    return new Promise ((resolve, reject) => {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+            .then((res)=> {
+                if(!res.ok) {
+                    reject(`HTTP Error! Status: ${res.status}`);
+                } else {
+                    resolve(res.json());
+                }
+            });
+    });
+}
+
+async function fetchPokemons(n) {
+    for(let i = 1; i <= n; i++) {
+        try {
+            const data = await fetchPokemon(i);
+            const { id, name, sprites, types } = data;
+            const pokemon = new Pokemon(id, name, sprites.front_default, types[0].type.name);
+            availablePokemon.push(pokemon);
+        } catch (error) {
+            console.error('Error en la solicitud fetch:', error);
+            showModal('Error!', 'An error ocurred while trying to get the Pokemon data. Please, try again later, trainer!');
         }
+    }
+
+}
+
+fetchPokemons(150);
+
+// Event listeners
+
+teamName.addEventListener("keyup", (e) => {
+    
+    if (e.key === "Enter") {
+        teamName.value !== "" && (teamTitle.innerText = teamName.value);
         teamName.value = "";
     }
 });
 
 addBtn.addEventListener("click", ()=>{
-    if(teamName.value !== ""){
-        teamTitle.innerText = teamName.value;
-    };
+
+    teamName.value !== "" && (teamTitle.innerText = teamName.value);
 
     teamName.value = "";
 });
 
 nameFilter.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-        handleSearch();
-    }
+    if (e.key === "Enter") handleSearch();
 });
 
 searchBtn.addEventListener("click", () => {
@@ -172,23 +303,9 @@ searchBtn.addEventListener("click", () => {
 });
 
 clearBtn.addEventListener("click", ()=>{
-    itemCount = 0;
     nameFilter.value = "";
-    while (availList.firstChild) {
-        availList.removeChild(availList.firstChild);
-    }
-});
-
-pickedList.addEventListener("click", (event) => {
-    if (event.target.tagName === "BUTTON") {
-        const card = event.target.closest(".card");
-        if (card) {
-            card.remove();
-            const pokemonName = card.querySelector(".card-title").innerText;
-            removePokemonFromTeam(pokemonName);
-            cardCount--;
-        }
-    }
+    removeAllChildren(availList);
+    initPokemonList();
 });
 
 saveBtn.addEventListener("click", () => {
@@ -206,18 +323,16 @@ saveBtn.addEventListener("click", () => {
 
         resetVars();
 
-        while (pickedList.firstChild) {
-            pickedList.removeChild(pickedList.firstChild);
-        }
-
-        while (availList.firstChild) {
-            availList.removeChild(availList.firstChild);
-        }
+        removeAllChildren(pickedList);
+        removeAllChildren(availList);
 
         showModal(`Congratulations, ${cachedName}!`, `Your Pokémon team has been saved successfully. Come back soon to create new amazing Pokémon teams!`);
 
+        localStorage.removeItem("pokemonTeam");
+        initPokemonList();
+
     } else {
-        showModal(`Something went wrong!`, `Please, give your team a name and fill it before attempting to save it, trainer!`);
+        showModal(`Something went wrong!`, `Please, give your team a name before attempting to save it, trainer!`);
     }
 });
 

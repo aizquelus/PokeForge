@@ -229,6 +229,7 @@ main {
     text-decoration: none; 
     color: white;
     box-shadow: inset -4px -4px 0px 0px #4AA52E;
+    cursor: pointer;
 
 }
 
@@ -297,7 +298,103 @@ main {
     box-shadow: inset 4px 4px 0px 0px #E59400;
 }
 
+#trainer-page {
+    justify-content: space-evenly;
+    min-height: 85vh;
+}
 
+#trainer-page .intro-info-btns, .pokemon-maker .intro-info-btns {
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#trainer-page .intro-btn, .pokemon-maker .intro-btn {
+    width: 90%;
+    padding: 15px
+}
+
+.pokemon-available {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+}
+
+.pokemon-available li {
+    flex: 1 0 5%;
+    min-width: 200px;
+    max-width: 200px;
+    margin: 0 10px 30px 10px;
+}
+
+.pokemon-available li img {
+    width: 100%;
+}
+
+.card {
+    align-items: center;
+    margin: 15px;
+    padding-bottom: 20px;
+}
+
+.background-shape {
+    border-radius: 33% 67% 67% 33% / 49% 29% 71% 51% ;
+    background-color: #241e1f97;
+}
+
+.card-img-top {
+    width: 80%;
+}
+
+.card .delete-button {
+    font-size: 0.7rem;
+}
+
+.type {
+    color: #FFF;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.input-box {
+    width: 90%;
+    background-color: #FFF;
+    padding: 30px 50px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 40px;
+}
+
+.input-box input, .input-box label {
+    margin-bottom: 1rem;
+}
+
+.input-box input {
+    margin-bottom: 1rem;
+}
+
+.pokemon-maker .intro-info-btns {
+    margin-top: 30px;
+    width: 80%
+}
+
+.accordion .intro-btn {
+    margin-top: 40px;
+}
+
+#scrollToTop {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+}
+
+button {
+    padding: 5px 10px;
+    border-radius: 5px;
+}
 
 /*-------------------- END OF MAIN SECTION --------------------*/
 
@@ -354,6 +451,15 @@ main {
     border-radius: 50%;
 }
 
+.hidden {
+    display: none;
+}
+
+.toast-close {
+    font-size: 1.5rem;
+    margin-top: -5px;
+}
+
 /*-------------------- FOOTER --------------------*/
 .footer {
     padding: 5% 15%;
@@ -378,3 +484,29 @@ main {
 }
 
 /*-------------------- END OF FOOTER --------------------*/
+
+
+/*-------------------- MEDIA QUERIES --------------------*/
+
+@media (min-width: 768px) {
+    .dialog img {
+        height: 110px;
+    }
+
+    .dialog-text, .intro-name {
+        font-size: 0.8rem;
+    }
+
+    #trainer-page .intro-info-btns, .pokemon-maker .intro-info-btns {
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    #trainer-page .intro-btn, .pokemon-maker .intro-btn {
+        width: 40%;
+    }
+
+    .input-box {
+        width: 65vw;
+    }
+}

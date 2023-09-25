@@ -62,29 +62,35 @@
         </nav>
     </header>
 
-    <main>
+    <main class="pokemon-maker">
 
         <div>
             <h1>We will create the best Pokémon team for you!</h1>
         </div>
 
-        <div>
+        <div class="input-box">
             <h5>Start by giving your team a name</h5>
             <label for="teamName">What's the name of your team?</label>
             <input type="text" name="teamName" id="teamName">
             <button id="addBtn" type="button">Add</button>
         </div>
 
-        <button id="createBtn" class="intro-btn" type="button">Create Team</button>
-        <button id="regenerateBtn" class="intro-btn intro-btn--reset" type="button">Clear</button>
+        <div class="intro-info-btns">
+            <button id="createBtn" class="intro-btn" type="button">Create Team</button>
+            <button id="clearBtn" class="intro-btn intro-btn--reset" type="button">Clear</button>
+        </div>
 
         <h2 class="team-title"></h2>
 
-        <ul id="pokeList">
+        <ul id="pokeList"></ul>
+        <div id="spinner" class="spinner-border hidden" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
 
-        </ul>
+        <!-- <button id="save" class="hidden" type="button">Save your team!</button> -->
+        <a id="save" class="intro-btn hidden">Save your team!</a>
 
-        <button id="save" type="button">Save your team!</button>
+        <button id="scrollToTop" class="btn btn-primary btn-lg" title="Volver arriba">↑</button>
 
     </main>
     <footer id="footer" class="footer dark-background">
