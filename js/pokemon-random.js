@@ -60,14 +60,12 @@ function capitalizeText(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-function fetchPokemon(id) {
-    return fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
-        .then((res) => res.json())
-        .then((data) => {
-            const { id, name, sprites, types } = data;
-            const pokemon = new Pokemon(id, name, sprites.front_default, types[0].type.name);
-            return pokemon;
-        });
+async function fetchPokemon(id) {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+    const data = await res.json();
+    const { id: id_1, name, sprites, types } = data;
+    const pokemon = new Pokemon(id_1, name, sprites.front_default, types[0].type.name);
+    return pokemon;
 }
 
 function fetchPokemons(n) {
@@ -185,7 +183,7 @@ createBtn.addEventListener("click", () => {
         }
 
         spinner.classList.remove("hidden");
-        
+
         setTimeout(() => {
             createBtn.innerText = "Try Again";
             createBtn.classList.add("intro-btn--proceed");
