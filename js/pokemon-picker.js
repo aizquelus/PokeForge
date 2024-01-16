@@ -51,6 +51,10 @@ const availablePokemon = [];
 
 // Funciones de utilidad
 
+function capitalizeText(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 window.onscroll = function() {
     const scrollToTopButton = document.getElementById("scrollToTop");
     scrollToTopButton.style.display = (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) ? "block" : "none";
@@ -85,11 +89,12 @@ function resetVars() {
 // Otras funciones
 
 function addPokemonToTeam(pokemon, arr) {
+    const capitalizedPokeName = capitalizeText(pokemon.name);
     if (arr.length < MAX_TEAM_SIZE) {
         arr.push(pokemon);
         localStorage.setItem("pokemonTeam", JSON.stringify(pokemonTeam));
         Toastify({
-            text: `${pokemon.name} has been added to your team!`,
+            text: `${capitalizedPokeName} has been added to your team!`,
             duration: 3000,
             newWindow: true,
             close: true,
@@ -118,6 +123,7 @@ function removePokemonFromTeam(pokemonName, arr) {
 function createPokemonCard(pokemon){
     const {image, name, type} = pokemon;
     const colorHex = typeColor[type];
+    const capitalizedPokeName = capitalizeText(name);
     if(cardCount < MAX_TEAM_SIZE){
         const pokemonListItem = document.createElement("li");
         pokemonListItem.innerHTML = 
@@ -125,7 +131,7 @@ function createPokemonCard(pokemon){
         <div class="card" style="width: 18rem; background: radial-gradient(circle at 50% 0%, ${colorHex} 36%, #ffffff 36%); background-color: ${colorHex};">
             <img src=${image} class="card-img-top" alt="${name}">
             <div class="card-body">
-                <h5 class="card-title">${name}</h5>
+                <h5 class="card-title">${capitalizedPokeName}</h5>
                 <p><span class="type" style="background-color: ${colorHex}">${type}</span></p>
             </div>
             <button id="clearBtn" class="delete-button intro-btn intro-btn--reset" type="button">Delete</button>

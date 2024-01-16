@@ -56,6 +56,10 @@ document.getElementById("scrollToTop").addEventListener("click", function() {
     document.documentElement.scrollTop = 0;
 });
 
+function capitalizeText(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 function fetchPokemon(id) {
     return fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
         .then((res) => res.json())
@@ -134,13 +138,14 @@ function getRandomPokemon(mainArr, amount) {
 function createPokemonCard(pokemon) {
     const {image, name, type} = pokemon;
     const colorHex = typeColor[type];
+    const capitalizedPokeName = capitalizeText(name)
     const li = document.createElement("li");
         li.innerHTML = 
         `
         <div class="card" style="width: 18rem; background: radial-gradient(circle at 50% 0%, ${colorHex} 36%, #ffffff 36%); background-color: ${colorHex};">
             <img src=${image} class="card-img-top" alt="${name}">
             <div class="card-body">
-                <h5 class="card-title">${name}</h5>
+                <h5 class="card-title">${capitalizedPokeName}</h5>
                 <p><span class="type" style="background-color: ${colorHex}">${type}</span></p>
             </div>
         </div>
