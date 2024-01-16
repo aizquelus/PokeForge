@@ -66,6 +66,7 @@ if (customTitle && trainerName) {
                 })
                 localStorage.removeItem("trainerName");
                 localStorage.removeItem("pokemonTeam");
+                localStorage.removeItem("randomPokemon");
                 localStorage.removeItem("savedTeams");
             }
         });
