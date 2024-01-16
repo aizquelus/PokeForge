@@ -242,8 +242,9 @@ function renderFilteredPokemon(arr) {
 
 function handleSearch() {
     const searchTerm = nameFilter.value;
-
-    const foundPokemon = filterPokemonByName(availablePokemon, searchTerm);
+    const searchTermLowercase = searchTerm.toLowerCase();
+    
+    const foundPokemon = filterPokemonByName(availablePokemon, searchTermLowercase);
     renderFilteredPokemon(foundPokemon);
 }
 
